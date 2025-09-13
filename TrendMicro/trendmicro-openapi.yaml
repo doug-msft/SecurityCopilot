@@ -3,7 +3,7 @@ info:
   title: Trend Micro Vision One - Minimal API
   version: '1.0.0'
 servers:
-  - url: https://automation.trendmicro.com/xdr/api-v3
+  - url: https://api.xdr.trendmicro.com
 paths:
   /v3.0/workbench/alerts:
     get:

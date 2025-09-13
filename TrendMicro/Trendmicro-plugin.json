@@ -1,17 +1,26 @@
 {
   "Descriptor": {
     "Name": "TrendMicroVisionOne",
-    "DisplayName": "Trend Micro Vision One",
+    "DisplayName": "Trend Micro",
     "Description": "Query and investigate security incidents, detections, and endpoint telemetry from Trend Micro Vision One Workbench and Endpoint Security APIs.",
     "DescriptionDisplay": "Enables Security Copilot to retrieve and investigate alerts and endpoint data from Trend Micro Vision One.",
     "Icon": "https://w7.pngwing.com/pngs/753/63/png-transparent-trend-micro-internet-security-antivirus-software-malware-computer-security-trend-icon-trademark-computer-logo.png",
     "ContactEmail": "",
-    "Category": "Plugin"
+    "Category": "Plugin",
+    "SupportedAuthTypes": [
+      "ApiKey"
+    ],
+    "Authorization": {
+      "Type": "APIKey",
+      "Key": "Authorization",
+      "Location": "Header",
+      "AuthScheme": "Bearer"
+    }
   },
 
   "api": {
     "type": "openapi",
-    "url": "trendmicro-openapi.yaml"
+    "url": "https://raw.githubusercontent.com/doug-msft/SecurityCopilot/39a1d96226f91640b800a4e46b706de0da88050e/TrendMicro/trendmicro-openapi.yaml"
   },
  
   "auth": {
@@ -19,36 +28,36 @@
     "instructions": "Trend Micro XDR (Trend Vision One) requires obtaining an access token or API credential from your Trend Micro tenant. Follow the Trend Micro XDR API docs: https://automation.trendmicro.com/xdr/api-v3/ to create API credentials (API key or OAuth client) and exchange them for a bearer token. Do NOT embed long-lived tokens in the manifest for production. When uploading this manifest to Security Copilot, use the plugin 'Set up' dialog to paste the bearer token or API key into the credential field instead of storing it here.",
     "parameters": [
       {
-        "Name": "Auth Mode",
-        "Description": "Select how you'll authenticate: 'apiKey' or 'oauth' (client id/secret).",
-        "Required": true,
-        "Type": "string",
-        "DefaultValue": "apiKey"
+        "name": "authMode",
+        "description": "Select how you'll authenticate: 'apiKey' or 'oauth' (client id/secret).",
+        "required": true,
+        "type": "string",
+        "default": "apiKey"
       },
       {
-        "Name": "API Key Header",
-        "Description": "If using an API key, the header name (commonly 'x-api-key' or 'Authorization: Bearer <token>'). Put the header name you will use.",
-        "Required": false,
-        "Type": "string",
-        "DefaultValue": "Authorization"
+        "name": "apiKeyHeader",
+        "description": "If using an API key, the header name (commonly 'x-api-key' or 'Authorization: Bearer <token>').",
+        "required": false,
+        "type": "string",
+        "default": "Authorization"
       },
       {
-        "Name": "API Key Value",
-        "Description": "If using an API key directly, paste its value here (or leave blank if you will paste a bearer token in the plugin UI).",
-        "Required": false,
-        "Type": "password"
+        "name": "apiKeyValue",
+        "description": "If using an API key directly, paste its value here (or leave blank to paste a bearer token in the plugin UI).",
+        "required": false,
+        "type": "password"
       },
       {
-        "Name": "ClientId",
-        "Description": "When using OAuth, provide the OAuth Client ID from Trend Micro.",
-        "Required": false,
-        "Type": "string"
+        "name": "clientId",
+        "description": "When using OAuth, provide the OAuth Client ID from Trend Micro.",
+        "required": false,
+        "type": "string"
       },
       {
-        "Name": "ClientSecret",
-        "Description": "When using OAuth, provide the OAuth Client Secret from Trend Micro.",
-        "Required": false,
-        "Type": "password"
+        "name": "clientSecret",
+        "description": "When using OAuth, provide the OAuth Client Secret from Trend Micro.",
+        "required": false,
+        "type": "password"
       }
     ]
   },
@@ -57,8 +66,8 @@
     {
       "Format": "API",
       "Settings": {
-        "OpenApiSpecUrl": "trendmicro-openapi.yaml",
-        "EndpointUrl": "https://automation.trendmicro.com/xdr/api-v3"
+  "OpenApiSpecUrl": "https://raw.githubusercontent.com/doug-msft/SecurityCopilot/39a1d96226f91640b800a4e46b706de0da88050e/TrendMicro/trendmicro-openapi.yaml",
+  "EndpointUrl": "https://api.xdr.trendmicro.com"
       },
       "Skills": [
         {
