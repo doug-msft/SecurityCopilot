@@ -1,0 +1,121 @@
+{
+  "Descriptor": {
+    "Name": "TrendMicroVisionOne",
+    "DisplayName": "Trend Micro Vision One",
+    "Description": "Query and investigate security incidents, detections, and endpoint telemetry from Trend Micro Vision One Workbench and Endpoint Security APIs.",
+    "DescriptionDisplay": "Enables Security Copilot to retrieve and investigate alerts and endpoint data from Trend Micro Vision One.",
+    "Icon": "https://w7.pngwing.com/pngs/753/63/png-transparent-trend-micro-internet-security-antivirus-software-malware-computer-security-trend-icon-trademark-computer-logo.png",
+    "ContactEmail": "",
+    "Category": "Plugin"
+  },
+
+  "api": {
+    "type": "openapi",
+    "url": "trendmicro-openapi.yaml"
+  },
+ 
+  "auth": {
+    "authorization_type": "bearer",
+    "instructions": "Trend Micro XDR (Trend Vision One) requires obtaining an access token or API credential from your Trend Micro tenant. Follow the Trend Micro XDR API docs: https://automation.trendmicro.com/xdr/api-v3/ to create API credentials (API key or OAuth client) and exchange them for a bearer token. Do NOT embed long-lived tokens in the manifest for production. When uploading this manifest to Security Copilot, use the plugin 'Set up' dialog to paste the bearer token or API key into the credential field instead of storing it here.",
+    "parameters": [
+      {
+        "Name": "Auth Mode",
+        "Description": "Select how you'll authenticate: 'apiKey' or 'oauth' (client id/secret).",
+        "Required": true,
+        "Type": "string",
+        "DefaultValue": "apiKey"
+      },
+      {
+        "Name": "API Key Header",
+        "Description": "If using an API key, the header name (commonly 'x-api-key' or 'Authorization: Bearer <token>'). Put the header name you will use.",
+        "Required": false,
+        "Type": "string",
+        "DefaultValue": "Authorization"
+      },
+      {
+        "Name": "API Key Value",
+        "Description": "If using an API key directly, paste its value here (or leave blank if you will paste a bearer token in the plugin UI).",
+        "Required": false,
+        "Type": "password"
+      },
+      {
+        "Name": "ClientId",
+        "Description": "When using OAuth, provide the OAuth Client ID from Trend Micro.",
+        "Required": false,
+        "Type": "string"
+      },
+      {
+        "Name": "ClientSecret",
+        "Description": "When using OAuth, provide the OAuth Client Secret from Trend Micro.",
+        "Required": false,
+        "Type": "password"
+      }
+    ]
+  },
+
+  "SkillGroups": [
+    {
+      "Format": "API",
+      "Settings": {
+        "OpenApiSpecUrl": "trendmicro-openapi.yaml",
+        "EndpointUrl": "https://automation.trendmicro.com/xdr/api-v3"
+      },
+      "Skills": [
+        {
+          "Name": "GetWorkbenchAlerts",
+          "Description": "Retrieve a list of security alerts from Trend Micro Vision One Workbench.",
+          "DescriptionForModel": "Gets a list of security alerts from Trend Micro Vision One Workbench API. Supports filtering by time range, severity, status, or host. Returns alert summary records suitable for triage and investigation.",
+          "Inputs": [
+            { "Name": "startDateTime", "Description": "Start date/time in ISO 8601 format (e.g. 2025-09-01T00:00:00Z)", "Required": false },
+            { "Name": "endDateTime", "Description": "End date/time in ISO 8601 format", "Required": false },
+            { "Name": "severity", "Description": "Alert severity (low, medium, high)", "Required": false },
+            { "Name": "status", "Description": "Alert status (open, closed)", "Required": false },
+            { "Name": "limit", "Description": "Maximum number of results to return", "Required": false, "DefaultValue": "50" }
+          ],
+          "Settings": {
+            "OperationHint": "GET /v3.0/workbench/alerts",
+            "Notes": "This skill calls the Workbench alerts list endpoint. Ensure your OpenAPI spec includes the /v3.0/workbench/alerts GET operation."
+          }
+        },
+        {
+          "Name": "GetWorkbenchAlertDetails",
+          "Description": "Retrieve details for a specific Workbench alert.",
+          "DescriptionForModel": "Gets full details, timeline, and related artifacts for a specific alert from Trend Micro Vision One Workbench API.",
+          "Inputs": [
+            { "Name": "alertId", "Description": "The unique ID of the alert (alert.uuid or id)", "Required": true }
+          ],
+          "Settings": {
+            "OperationHint": "GET /v3.0/workbench/alerts/{alertId}",
+            "Notes": "Replace {alertId} with the alert unique identifier returned by the alerts list."
+          }
+        },
+        {
+          "Name": "ListEndpoints",
+          "Description": "List endpoints from Trend Micro Endpoint Security.",
+          "DescriptionForModel": "Retrieves a list of endpoints managed by Trend Micro Endpoint Security (Endpoint Security API). Supports filtering by hostname or OS.",
+          "Inputs": [
+            { "Name": "hostname", "Description": "Filter by endpoint hostname", "Required": false },
+            { "Name": "os", "Description": "Filter by operating system", "Required": false },
+            { "Name": "limit", "Description": "Maximum number of results to return", "Required": false, "DefaultValue": "50" }
+          ],
+          "Settings": {
+            "OperationHint": "GET /v3.0/endpoints",
+            "Notes": "Ensure your OpenAPI spec includes the endpoints list operation for Endpoint Security."
+          }
+        },
+        {
+          "Name": "GetEndpointDetails",
+          "Description": "Retrieve details for a specific endpoint.",
+          "DescriptionForModel": "Gets full details (hostname, IP, last seen, installed agents, alerts) for a specific endpoint managed by Trend Micro.",
+          "Inputs": [
+            { "Name": "endpointId", "Description": "The unique ID of the endpoint", "Required": true }
+          ],
+          "Settings": {
+            "OperationHint": "GET /v3.0/endpoints/{endpointId}",
+            "Notes": "Use the endpointId returned by the endpoints list."
+          }
+        }
+      ]
+    }
+  ]
+}
