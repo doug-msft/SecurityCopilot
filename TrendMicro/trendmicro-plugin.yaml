@@ -4,7 +4,6 @@ Descriptor:
   Description: "Trend Micro Vision One integration for Security Copilot"
   DescriptionDisplay: "Retrieve alerts and endpoint data from Trend Micro Vision One"
   Icon: "https://w7.pngwing.com/pngs/753/63/png-transparent-trend-micro-internet-security-antivirus-software-malware-computer-security-trend-icon-trademark-computer-logo.png"
-  ContactEmail: ""
   Category: Plugin
   SupportedAuthTypes:
     - ApiKey
