@@ -13,10 +13,6 @@ Descriptor:
     Location: Header
     AuthScheme: Bearer
 
-api:
-  type: openapi
-  url: https://raw.githubusercontent.com/doug-msft/SecurityCopilot/39a1d96226f91640b800a4e46b706de0da88050e/TrendMicro/trendmicro-openapi.yaml
-
 auth:
   authorization_type: bearer
   instructions: "Provide a Trend Micro Vision One bearer token or API key."
