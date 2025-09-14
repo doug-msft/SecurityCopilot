@@ -13,15 +13,6 @@ Descriptor:
     Location: Header
     AuthScheme: Bearer
 
-auth:
-  authorization_type: bearer
-  instructions: "Provide a Trend Micro Vision One bearer token or API key."
-  parameters:
-    - name: apiKeyValue
-      description: "Paste your API key or bearer token here"
-      required: true
-      type: password
-
 SkillGroups:
   - Format: API
     Settings:
