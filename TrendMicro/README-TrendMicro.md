@@ -2,7 +2,7 @@ README — Trend Micro Vision One plugin for Microsoft Security Copilot
 
 Overview
 
-This folder contains a Security Copilot plugin manifest: `Trendmicro-plugin.json` which exposes a small set of skills to query Trend Micro Vision One (Workbench alerts and Endpoint Security endpoints).
+This folder contains a Security Copilot plugin manifest `trendmicro-plugin.yaml` (YAML) and an OpenAPI spec `trendmicro-openapi.yaml` which expose a small set of skills to query Trend Micro Vision One (Workbench alerts and Endpoint Security endpoints).
 
 This README explains how to upload and configure the plugin, how to test it from Security Copilot, and provides example curl / PowerShell calls you can use to validate connectivity.
 
@@ -15,7 +15,7 @@ Prerequisites
 
 - Access to Microsoft Security Copilot with permission to upload custom plugins.
 - Trend Micro Vision One / XDR API credentials (API key or OAuth client id/secret). The official docs are: https://automation.trendmicro.com/xdr/api-v3/
-- (Optional) If Security Copilot cannot fetch the vendor OpenAPI spec, host the OpenAPI spec at a reachable URL and update `Trendmicro-plugin.json` OpenApiSpecUrl field.
+ - (Optional) If Security Copilot cannot fetch the vendor OpenAPI spec, host the OpenAPI spec at a reachable URL and update the plugin manifest `OpenApiSpecUrl` field (for example, `trendmicro-openapi.yaml`).
   Note: it's common for the Security Copilot uploader to be unable to reach vendor-hosted specs. You have two options:
   1) Host the OpenAPI spec at a public HTTPS URL (GitHub raw URL or your static hosting) and set `api.url` / `OpenApiSpecUrl` to that URL.
   2) Upload the manifest and the OpenAPI spec together; set `OpenApiSpecUrl` to the spec filename (e.g., `trendmicro-openapi.yaml`). The uploader will read the local spec if provided alongside the manifest.
@@ -24,10 +24,10 @@ Upload & setup steps (Security Copilot)
 
 1. Open Security Copilot: https://securitycopilot.microsoft.com/ and sign in with an account that can manage plugins.
 2. Go to Manage plugins -> Custom -> Add plugin.
-3. Choose the JSON file type and upload `Trendmicro-plugin.json`.
+3. Choose the YAML or JSON file type and upload `trendmicro-plugin.yaml` (recommended) or `Trendmicro-plugin.json`.
 4. After upload, click the plugin and then click "Set up" (or similar). Provide the following values when prompted:
    - "Auth Mode": choose `apiKey` (or `oauth` if you're using OAuth flow)
-   - "API Key Header": usually `Authorization` (if you will pass `Bearer <token>`) or `x-api-key` if Trend Micro provided a direct API key header name
+  - "API Key Header": usually `Authorization` (if you will pass `Bearer <token>`) or `x-api-key` if Trend Micro provided a direct API key header name. Note: the plugin/OpenAPI in this folder target the base URL `https://api.xdr.trendmicro.com`, so use a token valid for that endpoint.
    - "API Key Value": paste the bearer token or API key here (entering it in the UI is safer than embedding it in the manifest)
    - If using OAuth: enter `ClientId` and `ClientSecret` and follow Trend Micro docs to obtain tokens.
 5. Save the plugin configuration.
@@ -48,14 +48,14 @@ Example curl (replace <TOKEN>):
 
 ```
 curl -H "Authorization: Bearer <TOKEN>" \
-  "https://automation.trendmicro.com/xdr/api-v3/v3.0/workbench/alerts?limit=10"
+  "https://api.xdr.trendmicro.com/v3.0/workbench/alerts?limit=10"
 ```
 
 PowerShell (replace <TOKEN>):
 
 ```powershell
 $token = '<TOKEN>'
-Invoke-RestMethod -Method Get -Uri 'https://automation.trendmicro.com/xdr/api-v3/v3.0/workbench/alerts?limit=10' -Headers @{ Authorization = "Bearer $token" }
+Invoke-RestMethod -Method Get -Uri 'https://api.xdr.trendmicro.com/v3.0/workbench/alerts?limit=10' -Headers @{ Authorization = "Bearer $token" }
 ```
 
 If your tenant uses a different base URL or requires a token exchange endpoint, consult Trend Micro XDR docs and adapt the URL.
@@ -64,7 +64,7 @@ Troubleshooting
 
 - 401 Unauthorized: verify token validity, token expiry, correct header name (Authorization vs x-api-key).
 - 403 Forbidden: check API permissions in Trend Micro admin console.
-- 404 Not Found: confirm the API path matches your Trend Micro XDR API version (some tenants may use /v3 or /v3.0 variations); update OpenApiSpecUrl if needed.
+- 404 Not Found: confirm the API path matches your Trend Micro XDR API version (some tenants may use /v3 or /v3.0 variations); update OpenApiSpecUrl if needed. The sample OpenAPI in this folder targets the base URL `https://api.xdr.trendmicro.com`.
 - Plugin not calling API in Security Copilot: ensure the uploaded OpenAPI spec is reachable and the `OperationHint` endpoints in the manifest match the spec paths.
 
 - If you see an error like "The JSON value could not be converted to System.String" during upload, check any `DefaultValue` fields in the manifest. Security Copilot expects string typed default values; change numeric DefaultValue entries (e.g., 50) to strings (e.g., "50").
