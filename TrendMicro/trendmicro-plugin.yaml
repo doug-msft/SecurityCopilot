@@ -16,7 +16,7 @@ Descriptor:
 SkillGroups:
   - Format: API
     Settings:
-      OpenApiSpecUrl: https://raw.githubusercontent.com/doug-msft/SecurityCopilot/main/TrendMicro/trendmicro2-openapi.yaml
+      OpenApiSpecUrl: https://raw.githubusercontent.com/doug-msft/SecurityCopilot/main/TrendMicro/trendmicro-openapi.yaml
       EndpointUrl: https://api.xdr.trendmicro.com
     Skills:
       - Name: GetWorkbenchAlerts
