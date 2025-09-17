@@ -46,26 +46,6 @@ paths:
       responses:
         '200':
           description: OK
-  /v3.0/endpoints:
-    get:
-      operationId: ListEndpoints
-      summary: List endpoints
-      parameters:
-        - name: hostname
-          in: query
-          schema:
-            type: string
-        - name: os
-          in: query
-          schema:
-            type: string
-        - name: limit
-          in: query
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: OK
   /v3.0/endpointSecurity/endpoints:
     get:
       operationId: GetEndpointList
@@ -118,16 +98,22 @@ paths:
       responses:
         '200':
           description: OK
-  /v3.0/endpoints/{endpointId}:
-    get:
-      operationId: GetEndpointDetails
-      summary: Get endpoint details
-      parameters:
-        - name: endpointId
-          in: path
-          required: true
-          schema:
-            type: string
+  /v3.0/response/endpoints/restore:
+    post:
+      operationId: RestoreEndpoint
+      summary: Restore an isolated endpoint (Response API)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpointId:
+                  type: string
+                restoreType:
+                  type: string
+                  description: 'restore type, e.g. full or network'
       responses:
         '200':
           description: OK
