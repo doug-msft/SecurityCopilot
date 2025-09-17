@@ -66,6 +66,58 @@ paths:
       responses:
         '200':
           description: OK
+  /v3.0/endpointSecurity/endpoints:
+    get:
+      operationId: GetEndpointList
+      summary: Get endpoint list (Endpoint Security API)
+      parameters:
+        - name: hostname
+          in: query
+          schema:
+            type: string
+        - name: os
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  /v3.0/endpointSecurity/endpoints/{id}:
+    get:
+      operationId: GetEndpointDetailsById
+      summary: Get endpoint details by id (Endpoint Security API)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /v3.0/response/endpoints/isolate:
+    post:
+      operationId: IsolateEndpoint
+      summary: Isolate an endpoint (Response API)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpointId:
+                  type: string
+                isolationType:
+                  type: string
+                  description: 'isolation type, e.g. network'
+      responses:
+        '200':
+          description: OK
   /v3.0/endpoints/{endpointId}:
     get:
       operationId: GetEndpointDetails
