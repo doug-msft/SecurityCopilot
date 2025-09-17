@@ -14,7 +14,9 @@ Important security note
 Prerequisites
 
 - Access to Microsoft Security Copilot with permission to upload custom plugins.
-- Trend Micro Vision One / XDR API credentials (API key or OAuth client id/secret). The official docs are: https://automation.trendmicro.com/xdr/api-v3/
+- Trend Micro Vision One / XDR API key. The official docs are: 
+   --https://docs.trendmicro.com/en-us/documentation/article/trend-vision-one-platform-api-keys
+   --https://automation.trendmicro.com/xdr/api-v3/
  - (Optional) If Security Copilot cannot fetch the vendor OpenAPI spec, host the OpenAPI spec at a reachable URL and update the plugin manifest `OpenApiSpecUrl` field (for example, `trendmicro-openapi.yaml`).
   Note: For this sample plugin, you may use the existing OpenAPI spec path stored on this repo, which is already configured in the sample manifest file, as documented below:
   OpenApiSpecUrl: https://raw.githubusercontent.com/doug-msft/SecurityCopilot/main/TrendMicro/trendmicro-openapi.yaml 
